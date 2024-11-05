@@ -1,3 +1,4 @@
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -8,19 +9,15 @@ import java.util.List;
 
 public class ShamirSecret {
     public static void main(String[] args) throws Exception {
-        // Load JSON input
-    	JSONObject input = new JSONObject(new JSONTokener(new FileReader("C:\\Users\\gsaim\\Downloads\\input.json")));
+    	JSONObject input = new JSONObject(new JSONTokener(new FileReader("C:\\Users\\namra\\OneDrive\\Desktop\\input.json")));
         JSONArray testCases = input.getJSONArray("testCases");
 
-        // Process each test case
         for (int t = 0; t < testCases.length(); t++) {
             JSONObject testCase = testCases.getJSONObject(t);
 
-            // Extract keys n and k
             int n = testCase.getJSONObject("keys").getInt("n");
             int k = testCase.getJSONObject("keys").getInt("k");
 
-            // Parse points from JSON
             List<Point> points = new ArrayList<>();
             for (String key : testCase.keySet()) {
                 if (key.equals("keys")) continue;
@@ -30,17 +27,15 @@ public class ShamirSecret {
                 int base = point.getInt("base");
                 String value = point.getString("value");
 
-                BigInteger y = new BigInteger(value, base); // Convert to decimal
+                BigInteger y = new BigInteger(value, base); 
                 points.add(new Point(x, y));
             }
 
-            // Calculate the constant term using Lagrange interpolation
             BigInteger constantTerm = calculateConstantTerm(points, k);
             System.out.println("Secret for test case " + (t + 1) + " (constant term c): " + constantTerm);
         }
     }
 
-    // Method to calculate the constant term using Lagrange interpolation
     public static BigInteger calculateConstantTerm(List<Point> points, int k) {
         BigInteger result = BigInteger.ZERO;
 
@@ -60,7 +55,6 @@ public class ShamirSecret {
         return result;
     }
 
-    // Helper class for points
     static class Point {
         int x;
         BigInteger y;
